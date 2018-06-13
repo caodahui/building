@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import babelpolyfill from 'babel-polyfill'
+=======
+// import babelpolyfill from 'babel-polyfill'
+>>>>>>> 提交
 import Vue from 'vue'
 import App from './App'
 import ElementUI from 'element-ui'
@@ -8,13 +12,22 @@ import store from './vuex/store'
 import Vuex from 'vuex'
 import routes from './routes'
 import Mock from './mock'
+<<<<<<< HEAD
 Mock.bootstrap();
 import 'font-awesome/css/font-awesome.min.css'
 
+=======
+import axios from 'axios'
+import 'font-awesome/css/font-awesome.min.css'
+
+Mock.bootstrap();
+
+>>>>>>> 提交
 Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
+<<<<<<< HEAD
 //NProgress.configure({ showSpinner: false });
 
 const router = new VueRouter({
@@ -45,5 +58,29 @@ new Vue({
   store,
   //components: { App }
   render: h => h(App)
+=======
+Vue.prototype.axios = axios
+
+const router = new VueRouter({
+    routes
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.path == '/login') {
+        sessionStorage.removeItem('user');
+    }
+    let user = JSON.parse(sessionStorage.getItem('user'));
+    if (!user && to.path != '/login') {
+        next({path: '/login'})
+    } else {
+        next()
+    }
+})
+
+new Vue({
+    router,
+    store,
+    render: h => h(App)
+>>>>>>> 提交
 }).$mount('#app')
 
