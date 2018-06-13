@@ -1,74 +1,39 @@
 import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
-import Main from './views/Main.vue'
 import Table from './views/nav1/Table.vue'
-import Form from './views/nav1/Form.vue'
 import user from './views/nav1/user.vue'
-import Page4 from './views/nav2/Page4.vue'
-import Page5 from './views/nav2/Page5.vue'
-import Page6 from './views/nav3/Page6.vue'
-import echarts from './views/charts/echarts.vue'
+import Form from './views/nav1/Form.vue'
 
 let routes = [
     {
+        path: '/',
+        component: Home,
+        name: 'home',
+        iconCls: 'el-icon-message',//图标样式class
+        redirect: {path: '/user'},
+        children: [
+            {path: '/user', component: Table, name: '用户管理', iconClass: "fa fa-user-circle-o"},
+            {path: '/project', component: Table, name: '项目管理', iconClass: "fa fa-building"},
+            {path: '/transfer-record', component: user, name: '进出记录', iconClass: "fa fa-exchange"},
+            {path: '/checkWork', component: user, name: '考勤报表', iconClass: "fa fa-calendar-check-o"},
+            {path: '/workTime', component: Form, name: '工时报表', iconClass: "fa fa-times-rectangle-o"},
+            {path: '/staffList', component: user, name: '员工列表', iconClass: "fa fa-users"},
+        ]
+    }, {
         path: '/login',
         component: Login,
-        name: '',
+        name: 'login',
         hidden: true
-    },
-    {
+    }, {
         path: '/404',
         component: NotFound,
-        name: '',
+        name: 'NotFound',
         hidden: true
-    },
-    //{ path: '/main', component: Main },
-    {
-        path: '/',
-        component: Home,
-        name: '导航一',
-        iconCls: 'el-icon-message',//图标样式class
-        children: [
-            { path: '/main', component: Main, name: '主页', hidden: true },
-            { path: '/table', component: Table, name: 'Table' },
-            { path: '/form', component: Form, name: 'Form' },
-            { path: '/user', component: user, name: '列表' },
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '导航二',
-        iconCls: 'fa fa-id-card-o',
-        children: [
-            { path: '/page4', component: Page4, name: '页面4' },
-            { path: '/page5', component: Page5, name: '页面5' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '',
-        iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
-        children: [
-            { path: '/page6', component: Page6, name: '导航三' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: 'Charts',
-        iconCls: 'fa fa-bar-chart',
-        children: [
-            { path: '/echarts', component: echarts, name: 'echarts' }
-        ]
-    },
-    {
+    }, {
         path: '*',
         hidden: true,
-        redirect: { path: '/404' }
+        redirect: {path: '/404'}
     }
 ];
 
