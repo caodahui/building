@@ -14,10 +14,8 @@ let routes = [
         redirect: {path: '/user'},
         children: [
             {path: '/user', component: Table, name: '用户管理', iconClass: "fa fa-user-circle-o"},
-<<<<<<< HEAD
             {path: '/project', component: Table, name: '项目管理', iconClass: "fa fa-building"},
             {path: '/transfer-record', component: user, name: '进出记录', iconClass: "fa fa-exchange"},
-=======
             {
                 path: '/project',
                 component: () => import("./views/nav1/project.vue"),
@@ -30,7 +28,6 @@ let routes = [
                 name: '进出记录',
                 iconClass: "fa fa-exchange"
             },
->>>>>>> 提交
             {path: '/checkWork', component: user, name: '考勤报表', iconClass: "fa fa-calendar-check-o"},
             {path: '/workTime', component: Form, name: '工时报表', iconClass: "fa fa-times-rectangle-o"},
             {path: '/staffList', component: user, name: '员工列表', iconClass: "fa fa-users"},
