@@ -7,16 +7,14 @@ import store from './vuex/store'
 import Vuex from 'vuex'
 import routes from './routes'
 import Mock from './mock'
-import axios from 'axios'
 import 'font-awesome/css/font-awesome.min.css'
+import './axios'
 
 Mock.bootstrap();
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(Vuex)
-
-Vue.prototype.axios = axios
 
 const router = new VueRouter({
     routes

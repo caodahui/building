@@ -1,17 +1,11 @@
 var SIGN_REGEXP = /([yMdhsm])(\1*)/g;
 var DEFAULT_PATTERN = 'yyyy-MM-dd';
-<<<<<<< HEAD
-function padding(s, len) {
-    var len = len - (s + '').length;
-    for (var i = 0; i < len; i++) { s = '0' + s; }
-=======
 
 function padding(s, len) {
     var len = len - (s + '').length;
     for (var i = 0; i < len; i++) {
         s = '0' + s;
     }
->>>>>>> 提交
     return s;
 };
 
@@ -27,24 +21,10 @@ export default {
         return context == null || context == "" || context == "undefined" ? "" : context;
     },
     formatDate: {
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 提交
         format: function (date, pattern) {
             pattern = pattern || DEFAULT_PATTERN;
             return pattern.replace(SIGN_REGEXP, function ($0) {
                 switch ($0.charAt(0)) {
-<<<<<<< HEAD
-                    case 'y': return padding(date.getFullYear(), $0.length);
-                    case 'M': return padding(date.getMonth() + 1, $0.length);
-                    case 'd': return padding(date.getDate(), $0.length);
-                    case 'w': return date.getDay() + 1;
-                    case 'h': return padding(date.getHours(), $0.length);
-                    case 'm': return padding(date.getMinutes(), $0.length);
-                    case 's': return padding(date.getSeconds(), $0.length);
-=======
                     case 'y':
                         return padding(date.getFullYear(), $0.length);
                     case 'M':
@@ -59,7 +39,6 @@ export default {
                         return padding(date.getMinutes(), $0.length);
                     case 's':
                         return padding(date.getSeconds(), $0.length);
->>>>>>> 提交
                 }
             });
         },
@@ -72,14 +51,6 @@ export default {
                     var _int = parseInt(matchs2[i]);
                     var sign = matchs1[i];
                     switch (sign.charAt(0)) {
-<<<<<<< HEAD
-                        case 'y': _date.setFullYear(_int); break;
-                        case 'M': _date.setMonth(_int - 1); break;
-                        case 'd': _date.setDate(_int); break;
-                        case 'h': _date.setHours(_int); break;
-                        case 'm': _date.setMinutes(_int); break;
-                        case 's': _date.setSeconds(_int); break;
-=======
                         case 'y':
                             _date.setFullYear(_int);
                             break;
@@ -98,14 +69,11 @@ export default {
                         case 's':
                             _date.setSeconds(_int);
                             break;
->>>>>>> 提交
                     }
                 }
                 return _date;
             }
             return null;
         }
-
     }
-
 };
