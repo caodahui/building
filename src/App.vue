@@ -61,4 +61,8 @@
     .fade-leave-active {
         opacity: 0;
     }
+
+    .el-menu-item.is-active {
+        background-color: rgb(84, 92, 100);
+    }
 </style>

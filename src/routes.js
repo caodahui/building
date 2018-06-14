@@ -14,8 +14,6 @@ let routes = [
         redirect: {path: '/user'},
         children: [
             {path: '/user', component: Table, name: '用户管理', iconClass: "fa fa-user-circle-o"},
-            {path: '/project', component: Table, name: '项目管理', iconClass: "fa fa-building"},
-            {path: '/transfer-record', component: user, name: '进出记录', iconClass: "fa fa-exchange"},
             {
                 path: '/project',
                 component: () => import("./views/nav1/project.vue"),
