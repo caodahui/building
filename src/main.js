@@ -6,11 +6,11 @@ import VueRouter from 'vue-router'
 import store from './vuex/store'
 import Vuex from 'vuex'
 import routes from './routes'
-import Mock from './mock'
+// import Mock from './mock'
 import 'font-awesome/css/font-awesome.min.css'
 import './axios'
 
-Mock.bootstrap();
+// Mock.bootstrap();
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)

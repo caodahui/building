@@ -22,8 +22,10 @@
 </template>
 
 <script>
-    import {requestLogin} from '../api/api';
+    // import {requestLogin} from '../api/api';
     //import NProgress from 'nprogress'
+    import qs from 'qs'
+
     export default {
         data() {
             return {
@@ -46,7 +48,7 @@
             };
         },
         created() {
-            console.log(this.axios)
+            // console.log(this.axios.post.headers)
         },
         methods: {
             handleReset2() {
@@ -59,8 +61,8 @@
                         //_this.$router.replace('/table');
                         this.logining = true;
                         //NProgress.start();
-                        var loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
-                        requestLogin(loginParams).then(data => {
+                        var loginParams = {UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass};
+                        /*requestLogin(loginParams).then(data => {
                             this.logining = false;
                             //NProgress.done();
                             let {msg, code, user} = data;
@@ -74,7 +76,10 @@
                                 this.$router.push({path: '/table'});
                                 this.$router.push({path: '/user'});
                             }
-                        });
+                        });*/
+                        // this.axios.post('/api/user/loginout', loginParams)
+                        this.axios.post('/api/user/Login', qs.stringify({UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass}))
+                        // this.axios.post(`http://localhost:8080/gd/user/Login`, loginParams).then(res => res.data)
                     } else {
                         console.log('error submit!!');
                         return false;
