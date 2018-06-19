@@ -23,7 +23,7 @@
 
 <script>
     // import {requestLogin} from '../api/api';
-    //import NProgress from 'nprogress'
+    import NProgress from 'nprogress'
     import qs from 'qs'
 
     export default {
@@ -37,18 +37,18 @@
                 rules2: {
                     account: [
                         {required: true, message: '请输入账号', trigger: 'blur'},
-                        //{ validator: validaePass }
+                        // {validator: validaePass}
                     ],
                     checkPass: [
                         {required: true, message: '请输入密码', trigger: 'blur'},
-                        //{ validator: validaePass2 }
+                        // {validator: validaePass2}
                     ]
                 },
                 checked: true
             };
         },
         created() {
-            // console.log(this.axios.post.headers)
+
         },
         methods: {
             handleReset2() {
@@ -60,26 +60,37 @@
                     if (valid) {
                         //_this.$router.replace('/table');
                         this.logining = true;
-                        //NProgress.start();
-                        var loginParams = {UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass};
-                        /*requestLogin(loginParams).then(data => {
+                        NProgress.start();
+                        let loginParams = {UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass};
+                        console.log(this.axios)
+                        this.axios.post('/api/user/Login', {UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass}).then((result) => {
+                            NProgress.done();
                             this.logining = false;
-                            //NProgress.done();
-                            let {msg, code, user} = data;
-                            if (code !== 200) {
+                            if (result.data === 'is online') {
                                 this.$message({
-                                    message: msg,
-                                    type: 'error'
+                                    message: '已经是登录状态！',
+                                    type: 'warning'
                                 });
-                            } else {
-                                sessionStorage.setItem('user', JSON.stringify(user));
-                                this.$router.push({path: '/table'});
                                 this.$router.push({path: '/user'});
+                            } else {
+                                let data = JSON.parse(result.data)
+                                console.log(data)
+                                if (data.status === 'ok') {
+                                    sessionStorage.setItem('guid', data.guid);
+                                    sessionStorage.setItem('user', JSON.stringify(data.user));
+                                    this.$message({
+                                        message: '登陆成功！',
+                                        type: 'success'
+                                    });
+                                    this.$router.push({path: '/user'});
+                                } else {
+                                    this.$message.error('登陆失败');
+                                }
                             }
-                        });*/
-                        // this.axios.post('/api/user/loginout', loginParams)
-                        this.axios.post('/api/user/Login', qs.stringify({UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass}))
-                        // this.axios.post(`http://localhost:8080/gd/user/Login`, loginParams).then(res => res.data)
+                        }).catch(error => {
+                            console.error(error)
+                        })
+                        // this.axios.post(`http://localhost:8080/gd/user/loginout`, loginParams).then(res => res.data)
                     } else {
                         console.log('error submit!!');
                         return false;

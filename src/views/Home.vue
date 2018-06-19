@@ -68,7 +68,7 @@
             }
         },
         created() {
-            console.log(this.$router.options)
+            // console.log(this.$router.options)
         },
         methods: {
             onSubmit() {
@@ -88,8 +88,10 @@
                 this.$confirm('确认退出吗?', '提示', {
                     //type: 'warning'
                 }).then(() => {
-                    sessionStorage.removeItem('user');
-                    _this.$router.push('/login');
+                    this.axios.post('/api/user/loginout', {guid: sessionStorage.getItem('guid')}).then((result) => {
+                        sessionStorage.removeItem('guid');
+                        _this.$router.push('/login');
+                    })
                 }).catch(() => {
 
                 });
