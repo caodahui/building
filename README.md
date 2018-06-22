@@ -1,5 +1,3 @@
-**demo**: [https://taylorchen709.github.io/vue-admin/](https://taylorchen709.github.io/vue-admin/)
-
 # To start
 
 This is a project template for [vue-cli](https://github.com/vuejs/vue-cli)
@@ -45,9 +43,6 @@ You can change theme by
    import './assets/theme/your-theme/index.css'
 ```
 4. Edit src/styles/vars.scss
-
-![theme-blue](https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/rec-demo.gif)
-![theme-green](https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/theme-green.png)
 
 # Browser support
 

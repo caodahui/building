@@ -147,7 +147,6 @@
                     birth: '',
                     addr: ''
                 }
-
             }
         },
         methods: {
