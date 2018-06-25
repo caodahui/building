@@ -22,11 +22,11 @@ let routes = [
             },
             {
                 path: '/transfer-record',
-                component: () => import('./views/nav1/user.vue'),
+                component: () => import('./views/nav1/transfer-record.vue'),
                 name: '进出记录',
                 iconClass: "fa fa-exchange"
             },
-            {path: '/checkWork', component: user, name: '考勤报表', iconClass: "fa fa-calendar-check-o"},
+            {path: '/checkWork', component: Form, name: '考勤报表', iconClass: "fa fa-calendar-check-o"},
             {path: '/workTime', component: Form, name: '工时报表', iconClass: "fa fa-times-rectangle-o"},
             {path: '/staffList', component: user, name: '员工列表', iconClass: "fa fa-users"},
         ]

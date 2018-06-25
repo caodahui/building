@@ -3,12 +3,7 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
-                <el-select v-model="filters.ProjectNameValue" placeholder="项目" @change="projectChange">
-                    <el-option
-                            key="ALL"
-                            label="全部"
-                            value="ALL">
-                    </el-option>
+                <el-select v-model="filters.ProjectNameValue" placeholder="项目">
                     <el-option
                             v-for="item in filters.ProjectName"
                             :key="item.ProjectGUID"
@@ -19,11 +14,6 @@
 
                 <el-select v-model="filters.DeptNameValue" placeholder="部门">
                     <el-option
-                            key="ALL"
-                            label="全部"
-                            value="ALL">
-                    </el-option>
-                    <el-option
                             v-for="item in filters.DeptName"
                             :key="item.DeptGUID"
                             :label="item.DeptName"
@@ -32,11 +22,6 @@
                 </el-select>
 
                 <el-select v-model="filters.TeamNameValue" placeholder="班组">
-                    <el-option
-                            key="ALL"
-                            label="全部"
-                            value="ALL">
-                    </el-option>
                     <el-option
                             v-for="item in filters.TeamName"
                             :key="item.TeamGUID"
@@ -48,9 +33,17 @@
                 <el-form-item>
                     <el-input v-model="filters.CardNo" placeholder="卡号"></el-input>
                 </el-form-item>
-
                 <el-form-item>
-                    <el-button type="primary" v-on:click="search">查询</el-button>
+                    <el-date-picker
+                            v-model="filters.date"
+                            type="daterange"
+                            placeholder="选择日期范围"
+                            @change="date"
+                            range-separator="--">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" v-on:click="getUsers">查询</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -80,7 +73,7 @@
             </el-table-column>
             <el-table-column prop="UserIDCardNumber" width="180" label="身份证号">
             </el-table-column>
-            <el-table-column prop="UserBrithday" width="120" label="出生日期">
+            <el-table-column prop="UserBrithday" width="180" label="出生日期">
             </el-table-column>
             <el-table-column prop="UserNation" width="120" label="民族">
             </el-table-column>
@@ -115,6 +108,9 @@
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
     // import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+    function zero(date) {
+        return date < 10 ? '0' + date : date
+    }
 
     export default {
         data() {
@@ -127,26 +123,38 @@
                     DeptNameValue: '',
                     TeamNameValue: '',
                     CardNo: '',
+                    date: [this.getTime().yesterday, this.getTime().today]
                 },
                 users: [],
                 total: 0,
                 page: 1,
                 listLoading: false,
-                //sels: [],//列表选中列
+                // sels: [],//列表选中列
             }
         },
         mounted() {
             this.getProject()
             this.getDept()
             this.getTeam()
-            this.getUsers({
-                ProjectName: 'ALL',
-                DeptName: 'ALL',
-                TeamName: 'ALL',
-                CardNo: ''
-            })
         },
         methods: {
+            date(date) {
+                console.log(date)
+            },
+            getTime() {
+                //昨天的时间
+                var day1 = new Date();
+                day1.setTime(day1.getTime() - 24 * 60 * 60 * 1000);
+                var s1 = day1.getFullYear() + "-" + zero(day1.getMonth() + 1) + "-" + zero(day1.getDate());
+                //今天的时间
+                var day2 = new Date();
+                day2.setTime(day2.getTime());
+                var s2 = day2.getFullYear() + "-" + zero(day2.getMonth() + 1) + "-" + zero(day2.getDate());
+                return {
+                    yesterday: s1,
+                    today: s2
+                }
+            },
             handleCurrentChange(val) {
                 this.page = val;
                 this.getUsers({
@@ -154,7 +162,7 @@
                     DeptName: 'ALL',
                     TeamName: 'ALL',
                     CardNo: ''
-                })
+                });
             },
             projectChange(val) {  //项目过滤下拉的 点击
                 this.getDept(val)
@@ -171,6 +179,15 @@
                 this.axios.post('/api/project/projectlist', {guid: sessionStorage.getItem('guid')}).then((result) => {
                     var data = JSON.parse(result.data)
                     this.filters.ProjectName = data;
+                    this.filters.ProjectNameValue = data.length > 0 ? data[0].ProjectGUID : ''
+                    this.getUsers({
+                        ProjectName: this.filters.ProjectNameValue,
+                        DeptName: 'ALL',
+                        TeamName: 'ALL',
+                        CardNo: '',
+                        StartTime: this.filters.date[0],
+                        EndTime: this.filters.date[1]
+                    });
                     this.listLoading = false;
                     //NProgress.done();
                 }).catch((error) => {
@@ -211,14 +228,13 @@
                     CardNo: this.filters.CardNo
                 })
             },
-            //获取员工列表
             getUsers(params) {
-                let param = Object.assign({guid: sessionStorage.getItem('guid')}, params)
+                let param = Object.assign({guid: sessionStorage.getItem('guid')}, params);
                 this.listLoading = true;
-                this.axios.post('/api/emp/GetEmployessList', param).then((result) => {
+                this.axios.post('/api/inout/record', param).then((result) => {
                     var data = JSON.parse(result.data)
                     this.total = data.length;
-                    this.users = data;
+                    this.users = result.data;
                     this.listLoading = false;
                     //NProgress.done();
                 }).catch((error) => {
@@ -232,7 +248,7 @@
                 }).then(() => {
                     this.listLoading = true;
                     //NProgress.start();
-                    let para = {EmployessGUID: row.id};
+                    let para = {id: row.id};
                     this.axios.post("/api/emp/EmployessBlack", para).then((res) => {
                         this.listLoading = false;
                         //NProgress.done();

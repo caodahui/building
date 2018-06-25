@@ -10,18 +10,20 @@
                 </div>
             </el-col>
             <el-col :span="4" class="userinfo">
-                <el-dropdown trigger="hover">
-                    <span class="el-dropdown-link userinfo-inner"><img src="../assets/user.png"/> {{sysUserName}}</span>
+                <el-dropdown trigger="hover" :show-timeout="1.5">
+                    <span class="el-dropdown-link userinfo-inner">
+                        <img src="../assets/user.png"/> {{sysUserName}}
+                    <i class="el-icon-caret-bottom el-icon--right"></i></span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>我的消息</el-dropdown-item>
-                        <el-dropdown-item>设置</el-dropdown-item>
-                        <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+                        <!--<el-dropdown-item>我的消息</el-dropdown-item>
+                        <el-dropdown-item>设置</el-dropdown-item>-->
+                        <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-col>
         </el-col>
         <el-col :span="24" class="main">
-            <el-menu default-active="/user" router class="el-menu-vertical-demo" theme="dark" @open="handleOpen" @close="handleClose"
+            <el-menu :default-active="this.$route.path" router class="el-menu-vertical-demo" theme="dark" @open="handleOpen" @close="handleClose"
                      :collapse="collapsed">
                 <template v-for="(item, index) in $router.options.routes[0].children">
                     <el-menu-item :index="item.path" :route="item">
@@ -68,7 +70,7 @@
             }
         },
         created() {
-            // console.log(this.$router.options)
+            // console.log(this.$route.path)
         },
         methods: {
             onSubmit() {
@@ -110,7 +112,7 @@
             var user = sessionStorage.getItem('user');
             if (user) {
                 user = JSON.parse(user);
-                this.sysUserName = user.name || '';
+                this.sysUserName = user.SysUserName || '';
                 this.sysUserAvatar = user.avatar || '../assets/user.png';
             }
 
@@ -136,15 +138,35 @@
                 text-align: right;
                 padding-right: 35px;
                 float: right;
-                .userinfo-inner {
-                    cursor: pointer;
-                    color: #fff;
-                    img {
-                        width: 40px;
-                        height: 40px;
-                        border-radius: 20px;
-                        margin: 10px 0px 10px 10px;
-                        float: right;
+                .el-dropdown{
+                    .userinfo-inner {
+                        cursor: pointer;
+                        color: #fff;
+                        img {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 20px;
+                            margin: 10px 10px 10px 10px;
+                            float: left;
+                        }
+                        .el-icon-caret-bottom.el-icon--right{
+                            float: right;
+                            margin: 24px 0 0 10px;
+                            vertical-align: middle;
+                            transition: all 0.5s;
+                        }
+                    }
+                    &:hover{
+                        .userinfo-inner {
+                            .el-icon-caret-bottom.el-icon--right {
+                                -moz-transform:scaleY(-1);
+                                -webkit-transform:scaleY(-1);
+                                -o-transform:scaleY(-1);
+                                transform:scaleY(-1);
+                                /*IE*/
+                                filter:FlipV;
+                            }
+                        }
                     }
                 }
             }
