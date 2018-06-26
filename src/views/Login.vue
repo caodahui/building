@@ -62,7 +62,6 @@
                         this.logining = true;
                         NProgress.start();
                         let loginParams = {UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass};
-                        console.log(this.axios)
                         this.axios.post('/api/user/Login', {UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass}).then((result) => {
                             NProgress.done();
                             this.logining = false;
@@ -74,7 +73,6 @@
                                 this.$router.push({path: '/user'});
                             } else {
                                 let data = JSON.parse(result.data)
-                                console.log(data)
                                 if (data.status === 'ok') {
                                     sessionStorage.setItem('guid', data.guid);
                                     sessionStorage.setItem('user', JSON.stringify(data.user));

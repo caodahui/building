@@ -5,9 +5,9 @@
 import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
+import '../static/config'
 // import VueAxios from 'vue-axios'
-
-window.baseUrl = 'http://localhost:8081'
+window.baseUrl = config.httpUrl    //'http://localhost:8081'
 
 var instance = axios.create({
     baseURL: baseUrl,
