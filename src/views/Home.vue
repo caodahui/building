@@ -90,7 +90,7 @@
                 this.$confirm('确认退出吗?', '提示', {
                     //type: 'warning'
                 }).then(() => {
-                    this.axios.post('/api/user/loginout', {guid: sessionStorage.getItem('guid')}).then((result) => {
+                    this.axios.post('/user/loginout', {guid: sessionStorage.getItem('guid')}).then((result) => {
                         sessionStorage.removeItem('guid');
                         _this.$router.push('/login');
                     })

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    // import {requestLogin} from '../api/api';
+    // import {requestLogin} from '../api';
     import NProgress from 'nprogress'
     import qs from 'qs'
 
@@ -59,7 +59,7 @@
                 this.$confirm('确认退出吗?', '提示', {
                     //type: 'warning'
                 }).then(() => {
-                    this.axios.post('/api/user/loginout', {guid: sessionStorage.getItem('guid')}).then((result) => {
+                    this.axios.post('/user/loginout', {guid: sessionStorage.getItem('guid')}).then((result) => {
                         sessionStorage.removeItem('guid');
                         _this.$router.push('/login');
                     })
@@ -77,7 +77,7 @@
                         this.logining = true;
                         NProgress.start();
                         let loginParams = {UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass};
-                        this.axios.post('/api/user/Login', {UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass}).then((result) => {
+                        this.axios.post('/user/Login', {UserName: this.ruleForm2.account, UserPwd: this.ruleForm2.checkPass}).then((result) => {
                             NProgress.done();
                             this.logining = false;
                             if (result.data === 'is online') {

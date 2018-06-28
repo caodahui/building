@@ -22,7 +22,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     //NProgress.start();
     if (to.path === '/login') {
-        Vue.prototype.axios.post('/api/user/loginout', {guid: sessionStorage.getItem('guid')}).then((result) => {
+        Vue.prototype.axios.post('/user/loginout', {guid: sessionStorage.getItem('guid')}).then((result) => {
             sessionStorage.removeItem('guid');
             next({path: '/login'});
         })

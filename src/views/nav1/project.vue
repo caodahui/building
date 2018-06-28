@@ -73,7 +73,6 @@
 <script>
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
-    import {getUserListPage, removeUser, batchRemoveUser, editUser, addUser} from '../../api/api';
 
     export default {
         data() {
@@ -129,7 +128,7 @@
                 let para = {guid: sessionStorage.getItem('guid')};
                 this.listLoading = true;
                 //NProgress.start();
-                this.axios.post("/api/project/projectlist", para).then((res) => {
+                this.axios.post("/project/projectlist", para).then((res) => {
                     let data = JSON.parse(res.data)
                     this.total = res.data.total;
                     this.users = data;
@@ -160,7 +159,7 @@
                             {guid: sessionStorage.getItem('guid')},
                             {ProjectName: this.editForm.ProjectName, ProjectRemark: this.editForm.ProjectRemark, ProjectGUID: this.editForm.ProjectGUID}
                         );
-                        this.axios.post("/api/Project/UpdateProject", para).then((res) => {
+                        this.axios.post("/Project/UpdateProject", para).then((res) => {
                             this.editLoading = false;
                             //NProgress.done();
                             this.$message(res.data === 'ok' ? {
@@ -188,7 +187,7 @@
                                 {guid: sessionStorage.getItem('guid')},
                                 {ProjectName: this.addForm.ProjectName, ProjectRemark: this.addForm.ProjectRemark}
                             );
-                            this.axios.post("/api/project/AddProject", para).then((res) => {
+                            this.axios.post("/project/AddProject", para).then((res) => {
                                 this.addLoading = false;
                                 //NProgress.done();
                                 this.$message(res.data === 'ok' ? {

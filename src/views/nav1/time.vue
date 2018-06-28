@@ -55,13 +55,19 @@
                     <el-input v-model="filters.UserIDCardNumber" placeholder="省份证号"></el-input>
                 </el-form-item>
                 <el-form-item label-width="180px" prop="date">
-                    <el-date-picker
+                    <!--<el-date-picker
                             v-model="filters.date"
                             type="daterange"
                             placeholder="选择日期范围"
                             @change="date"
-                            range-separator="--"
+                            range-separator="&#45;&#45;"
                             format="yyyy-MM-dd HH:mm:ss">
+                    </el-date-picker>-->
+                    <el-date-picker
+                            v-model="filters.date"
+                            type="date"
+                            @change="date"
+                            placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item>
@@ -139,7 +145,7 @@
                     DeptNameValue: '',
                     TeamNameValue: '',
                     UserIDCardNumber: '',
-                    date: [this.getTime().yesterday, this.getTime().today]
+                    date: this.getTime().today
                 },
                 users: [],
                 currentPage: 1,
@@ -172,8 +178,9 @@
             },
             date(date) {
                 console.log(date)
-                let arr = date.split('--')
-                this.filters.date = arr
+            },
+            fomatTime(time) {
+                return [time + ' 00:00:00', time + ' 23:59:59']
             },
             getTime() {
                 //昨天的时间
@@ -189,27 +196,20 @@
                     today: s2
                 }
             },
-            handleCurrentChange(val) {
-                this.page = val;
-                this.getUsers({
-                    ProjectName: 'ALL',
-                    DeptName: 'ALL',
-                    TeamName: 'ALL',
-                    UserIDCardNumber: ''
-                });
-            },
             projectChange(val) {  //项目过滤下拉的 点击
                 let id = val.split('_')[1]
                 let name = val.split('_')[0]
                 this.getDept(id)
                 this.getTeam(id)
+                console.log(this.filters.date)
+                let date = this.fomatTime(this.filters.date)
                 this.getUsers({
-                    ProjectName: name,
+                    ProjectName: id,
                     DeptName: 'ALL',
                     TeamName: 'ALL',
                     UserIDCardNumber: '',
-                    StartTime: this.filters.date[0],
-                    EndTime: this.filters.date[1]
+                    StartTime: date[0],
+                    EndTime: date[1]
                 })
             },
             getProject() {  //获取条件之  项目
@@ -251,32 +251,33 @@
                 })
             },
             search() {
-                console.log(this.filters.date)
+                let date = this.fomatTime(this.filters.date)
                 this.getUsers({
                     ProjectName: this.filters.ProjectNameValue === 'ALL' || this.filters.ProjectNameValue === '' ? 'ALL' : this.filters.ProjectNameValue.split('_')[0],
                     DeptName: this.filters.DeptNameValue === '' ? 'ALL' : this.filters.DeptNameValue,
                     TeamName: this.filters.TeamNameValue === '' ? 'ALL' : this.filters.TeamNameValue,
                     UserIDCardNumber: this.filters.UserIDCardNumber,
-                    StartTime: this.filters.date[0],
-                    EndTime: this.filters.date[1]
+                    StartTime: date[0],
+                    EndTime: date[1]
                 })
             },
             reset() { //重置条件
                 this.$refs.filters.resetFields();
+                let date = this.fomatTime(this.filters.date)
                 this.getUsers({
                     ProjectName: 'ALL',
                     DeptName: 'ALL',
                     TeamName: 'ALL',
                     UserIDCardNumber: '',
-                    StartTime: this.filters.date[0],
-                    EndTime: this.filters.date[1]
+                    StartTime: date[0],
+                    EndTime: date[1]
                 })
 
             },
             getUsers(params) {
                 let param = Object.assign({guid: sessionStorage.getItem('guid')}, params);
                 this.listLoading = true;
-                this.axios.post('/inout/record', param).then((result) => {
+                this.axios.post('/inout/CountTime', param).then((result) => {
                     var data = JSON.parse(result.data)
                     this.total = data.length;
                     this.users = data;

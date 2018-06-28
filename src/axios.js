@@ -10,13 +10,13 @@ import '../static/config'
 window.baseUrl = config.httpUrl    //'http://localhost:8081'
 
 var instance = axios.create({
-    //baseURL: baseUrl,
+    baseURL: baseUrl,
     transformRequest: [function (data) {
         data = data || {}
         return qs.stringify(data);
     }],
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    withCredentials: true
+    // withCredentials: true
 });
 
 Vue.prototype.axios = instance

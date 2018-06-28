@@ -3,7 +3,7 @@ import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Table from './views/nav1/Table.vue'
 import user from './views/nav1/user.vue'
-import Form from './views/nav1/Form.vue'
+import time from './views/nav1/time.vue'
 
 let routes = [
     {
@@ -27,7 +27,7 @@ let routes = [
                 iconClass: "fa fa-exchange"
             },
             /*{path: '/checkWork', component: Form, name: '考勤报表', iconClass: "fa fa-calendar-check-o"},*/
-            {path: '/workTime', component: Form, name: '工时报表', iconClass: "fa fa-times-rectangle-o"},
+            {path: '/workTime', component: time, name: '工时报表', iconClass: "fa fa-times-rectangle-o"},
             {path: '/staffList', component: user, name: '员工列表', iconClass: "fa fa-users"},
         ]
     }, {

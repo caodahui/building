@@ -86,7 +86,7 @@
 <script>
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
-    // import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+    // import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api';
 
     export default {
         data() {
@@ -138,7 +138,7 @@
             getUsers() {
                 this.listLoading = true;
                 //NProgress.start();
-                this.axios.post('/api/user/userlist', {guid: sessionStorage.getItem('guid')}).then((result) => {
+                this.axios.post('/user/userlist', {guid: sessionStorage.getItem('guid')}).then((result) => {
                     let data = JSON.parse(result.data)
                     this.total = data.length;
                     this.users = data;
@@ -156,7 +156,7 @@
                     this.listLoading = true;
                     //NProgress.start();
                     let para = {UserName: row.SysUserName, guid: sessionStorage.getItem('guid')};
-                    this.axios.post("/api/user/DeleteUser", para).then((res) => {
+                    this.axios.post("/user/DeleteUser", para).then((res) => {
                         this.listLoading = false;
                         //NProgress.done();
                         this.$message(res.data === 'ok' ? {
@@ -175,7 +175,7 @@
             //查看密码
             handleSeepw: function (index, row) {
                 let para = {UserName: row.SysUserName, guid: sessionStorage.getItem('guid')}
-                this.axios.post("/api/user/SeePwd", para).then((res) => {
+                this.axios.post("/user/SeePwd", para).then((res) => {
                     this.editLoading = false;
                     this.seePassword = res.data
                 });
@@ -201,7 +201,7 @@
                             this.editLoading = true;
                             //NProgress.start();
                             let para = {guid: sessionStorage.getItem('guid'), UserName: this.editForm.SysUserName, UserPwd: this.editForm.SysUserPwd};
-                            this.axios.post("/api/user/UpdateUser", para).then((res) => {
+                            this.axios.post("/user/UpdateUser", para).then((res) => {
                                 this.editLoading = false;
                                 //NProgress.done();
                                 this.$message(res.data === 'ok' ? {
@@ -227,7 +227,7 @@
                         //NProgress.start();
                         let para = Object.assign({guid: sessionStorage.getItem('guid')}, this.addForm);
                         //para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                        this.axios.post("/api/user/AddUser", para).then((res) => {
+                        this.axios.post("/user/AddUser", para).then((res) => {
                             this.$message(res.data === 'ok' ? {
                                 message: '新增成功',
                                 type: 'success'
