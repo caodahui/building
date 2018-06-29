@@ -52,7 +52,7 @@
                 </el-form-item>
 
                 <el-form-item prop="UserIDCardNumber">
-                    <el-input v-model="filters.UserIDCardNumber" placeholder="省份证号"></el-input>
+                    <el-input v-model="filters.UserIDCardNumber" placeholder="身份证号"></el-input>
                 </el-form-item>
                 <el-form-item label-width="180px" prop="date">
                     <!--<el-date-picker
