@@ -15,6 +15,13 @@ var instance = axios.create({
         data = data || {}
         return qs.stringify(data);
     }],
+    validateStatus: function (status) {
+        /*if (status === 401) {
+            let url = window.location.origin + "/login"
+            window.location.href = url
+        }*/
+        return status
+    },
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     // withCredentials: true
 });

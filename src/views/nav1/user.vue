@@ -63,7 +63,7 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;" @row-dblclick="doubleClick">
             <el-table-column type="index" width="60" label="id">
             </el-table-column>
 
@@ -81,10 +81,10 @@
             </el-table-column>
             <!--<el-table-column prop="QuantumGUID" width="180" label="上班时间段">
             </el-table-column>-->
-            <el-table-column prop="state" width="120" label="人员状态" :formatter="formatSex" sortable>
+            <el-table-column prop="State" width="120" label="人员状态" :formatter="formatSex" sortable>
             </el-table-column>
-            <el-table-column prop="ProjectGUID" width="180" label="项目编号">
-            </el-table-column>
+            <!--<el-table-column prop="ProjectGUID" width="180" label="项目编号">
+            </el-table-column>-->
             <el-table-column prop="UserIDCardNumber" width="180" label="身份证号">
             </el-table-column>
             <el-table-column prop="UserBrithday" width="150" label="出生日期">
@@ -99,8 +99,8 @@
             </el-table-column>-->
             <el-table-column prop="Organ" width="120" label="原地">
             </el-table-column>
-            <el-table-column prop="IsDown" width="180" label="是否要向下更新">
-            </el-table-column>
+            <!--<el-table-column prop="IsDown" width="180" label="是否要向下更新">
+            </el-table-column>-->
 
             <el-table-column label="操作" width="150" fixed="right">
                 <template slot-scope="scope">
@@ -112,13 +112,22 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar">
             <!--<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>-->
-            <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
-            </el-pagination>
         </el-col>
+        <el-dialog
+                title="查看图片"
+                :visible.sync="dialogVisible"
+                size="tiny">
+            <div style="text-align: center">
+                <img :src="config.httpUrl + '/'+ recordPath" alt="暂无图片">
+            </div>
+            <span slot="footer" class="dialog-footer">
+        </span>
+        </el-dialog>
     </section>
 </template>
 
 <script>
+    import '../../../static/config'
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
     // import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api';
@@ -139,6 +148,9 @@
                 total: 0,
                 page: 1,
                 listLoading: false,
+                recordPath: '',
+                dialogVisible: false,
+                config: config
                 //sels: [],//列表选中列
             }
         },
@@ -154,8 +166,12 @@
             })
         },
         methods: {
-            formatSex(state) {
-                return state === 0 ? '正常' : '黑名单'
+            doubleClick(row, event) { //双击查看图片
+                this.dialogVisible = true
+                this.recordPath = row.UserImage
+            },
+            formatSex(row) {
+                return row.State === 0 ? '正常' : '黑名单'
             },
             handleCurrentChange(val) {
                 this.page = val;
@@ -240,6 +256,7 @@
                 this.listLoading = true;
                 this.axios.post('/emp/GetEmployessList', param).then((result) => {
                     var data = JSON.parse(result.data)
+                    console.log(data)
                     this.total = data.length;
                     this.users = data;
                     this.listLoading = false;

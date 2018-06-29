@@ -110,10 +110,12 @@
             </el-pagination>-->
         </el-col>
         <el-dialog
-                title="提示"
+                title="查看图片"
                 :visible.sync="dialogVisible"
                 size="tiny">
-            <img :src="config.httpUrl + '/'+ recordPath" alt="">
+            <div style="text-align: center">
+                <img :src="config.httpUrl + '/'+ recordPath" alt="暂无图片">
+            </div>
             <span slot="footer" class="dialog-footer">
         </span>
         </el-dialog>

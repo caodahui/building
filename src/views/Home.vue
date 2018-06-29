@@ -12,7 +12,7 @@
             <el-col :span="4" class="userinfo">
                 <el-dropdown trigger="hover" :show-timeout="1.5">
                     <span class="el-dropdown-link userinfo-inner">
-                        <img src="../assets/user.png"/> {{sysUserName}}
+                        {{sysUserName}}
                     <i class="el-icon-caret-bottom el-icon--right"></i></span>
                     <el-dropdown-menu slot="dropdown">
                         <!--<el-dropdown-item>我的消息</el-dropdown-item>

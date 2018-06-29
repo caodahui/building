@@ -73,26 +73,28 @@
                 <el-form-item>
                     <el-button type="primary" v-on:click="search">查询</el-button>
                     <el-button @click="reset">重置</el-button>
+                    <el-button @click="exportXls">导出</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
 
         <!--列表-->
-        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;"
-                  @row-dblclick="doubleClick">
+        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+            <el-table-column type="expand">
+                <template scope="props">
+                    <el-table :data="props.row.timeList" style="width: 100%;">
+                        <el-table-column prop="inout" label="进 / 出">
+                        </el-table-column>
+                        <el-table-column prop="time" label="时间">
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </el-table-column>
             <el-table-column type="index" width="60" label="id">
             </el-table-column>
-            <el-table-column prop="UserIDCardNumber" label="身份证号">
+            <el-table-column prop="UserName" label="姓名">
             </el-table-column>
-            <el-table-column prop="DeviceSN" label="设备号">
-            </el-table-column>
-            <el-table-column prop="RecordTime" label="时间">
-            </el-table-column>
-            <el-table-column prop="DeptName" label="部门">
-            </el-table-column>
-            <el-table-column prop="ProjectName" label="项目">
-            </el-table-column>
-            <el-table-column prop="TeamName" label="班组">
+            <el-table-column prop="TimeCount" label="工时">
             </el-table-column>
 
             <!--<el-table-column label="操作" width="150" fixed="right">
@@ -115,14 +117,6 @@
                     :total="users.length">
             </el-pagination>-->
         </el-col>
-        <el-dialog
-                title="提示"
-                :visible.sync="dialogVisible"
-                size="tiny">
-            <img :src="config.httpUrl + '/'+ recordPath" alt="">
-            <span slot="footer" class="dialog-footer">
-        </span>
-        </el-dialog>
     </section>
 </template>
 
@@ -151,9 +145,7 @@
                 currentPage: 1,
                 pagesize: 20,
                 listLoading: false,
-                dialogVisible: false,
-                recordPath: '',
-                config: config
+                config: config,
                 // sels: [],//列表选中列
             }
         },
@@ -171,13 +163,9 @@
             })*/
         },
         methods: {
-            doubleClick(row, event) { //双击查看图片
-                console.log(row.Snap)
-                this.dialogVisible = true
-                this.recordPath = row.Snap
-            },
             date(date) {
                 console.log(date)
+                this.filters.date = date
             },
             fomatTime(time) {
                 return [time + ' 00:00:00', time + ' 23:59:59']
@@ -195,6 +183,25 @@
                     yesterday: s1,
                     today: s2
                 }
+            },
+            exportXls() {//导出
+                let date = this.fomatTime(this.filters.date)
+                let param = {
+                    ProjectName: this.filters.ProjectNameValue === 'ALL' || this.filters.ProjectNameValue === '' ? 'ALL' : this.filters.ProjectNameValue.split('_')[1],
+                    DeptName: this.filters.DeptNameValue === '' ? 'ALL' : this.filters.DeptNameValue,
+                    TeamName: this.filters.TeamNameValue === '' ? 'ALL' : this.filters.TeamNameValue,
+                    UserIDCardNumber: this.filters.UserIDCardNumber,
+                    StartTime: date[0],
+                    EndTime: date[1],
+                    guid: sessionStorage.getItem('guid')
+                }
+
+                this.axios.post('/inout/counttimetoExcel', param).then((result) => {
+                    window.open(config.httpUrl + '/' + result.data)
+                    //NProgress.done();
+                }).catch((error) => {
+                    console.error(error)
+                })
             },
             projectChange(val) {  //项目过滤下拉的 点击
                 let id = val.split('_')[1]
@@ -253,7 +260,7 @@
             search() {
                 let date = this.fomatTime(this.filters.date)
                 this.getUsers({
-                    ProjectName: this.filters.ProjectNameValue === 'ALL' || this.filters.ProjectNameValue === '' ? 'ALL' : this.filters.ProjectNameValue.split('_')[0],
+                    ProjectName: this.filters.ProjectNameValue === 'ALL' || this.filters.ProjectNameValue === '' ? 'ALL' : this.filters.ProjectNameValue.split('_')[1],
                     DeptName: this.filters.DeptNameValue === '' ? 'ALL' : this.filters.DeptNameValue,
                     TeamName: this.filters.TeamNameValue === '' ? 'ALL' : this.filters.TeamNameValue,
                     UserIDCardNumber: this.filters.UserIDCardNumber,
